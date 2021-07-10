@@ -4,22 +4,41 @@ import kotlin.math.sqrt
 
 class SquareDecomposer {
 
-    // TODO: Complete the following function
     fun decomposeNumber(number: Int): Array<Int>? {
-        throw NotImplementedError("Not implemented")
-        val sqNum = number * number
-        var elemOfSequence = 0
-        var arrElemOfSequence: ArrayList<Int>
-        val firstElemOfSequence = number - 1
-        arrElemOfSequence.add(firstElemOfSequence * firstElemOfSequence)
-        val tempOfposition = 0
+        if (number > 4) {
+            val numLong = number.toLong()
+            val sqNumb = numLong * numLong
+            val firstElemOfSequence = numLong - 1L
+            val arrElemOfSequence: ArrayList<Long> = arrayListOf(firstElemOfSequence * firstElemOfSequence)
 
-        while (sqNum > arrElemOfSequence.sum()) {
-            var ostatok = sqNum - arrElemOfSequence.sum()
-            elemOfSequence = sqrt(ostatok.toDouble()).toInt()
-            arrElemOfSequence.add(elemOfSequence * elemOfSequence)
-        }
+            while (sqNumb > arrElemOfSequence.sum()) {
 
+                val elementOfSequence = arrElemOfSequence.last()
+                for (i in sqrt(elementOfSequence.toDouble()).toLong() - 1 downTo 1) {
+                    val tempArr = arrElemOfSequence.clone() as ArrayList<Long>
+                    tempArr.add(i * i)
 
+                    if (sqNumb >= tempArr.sum()) {
+                        arrElemOfSequence.add(i * i)
+                        break
+                    }
+                }
+
+                if (sqNumb != arrElemOfSequence.sum() && arrElemOfSequence.last() == 1L) {
+                    arrElemOfSequence.removeAt(arrElemOfSequence.lastIndex)
+                    val prevnumMinusOne = sqrt(arrElemOfSequence[arrElemOfSequence.lastIndex].toDouble()).toLong() - 1L
+                    arrElemOfSequence[arrElemOfSequence.lastIndex] = prevnumMinusOne * prevnumMinusOne
+                }
+            }
+
+            arrElemOfSequence.reverse()
+            val resultArr = Array(arrElemOfSequence.size) { 0 }
+            for ((countArr, i) in arrElemOfSequence.withIndex()) {
+                resultArr[countArr] = sqrt(i.toDouble()).toInt()
+            }
+
+            return resultArr
+
+        } else {return null}
     }
 }
